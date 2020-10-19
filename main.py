@@ -38,21 +38,14 @@ async def inline_query(event):
                 ans.append(await builder.article(entry, text=value_json['text'], description=value_json['desc']))
         await event.answer(ans)
         return
-        # TODO:dict{'label':'json'}  (label = label of builder, json = description, Image URL, text)
-        # TODO:Auto reload modules on function call
-
-        # ans = builder.article('Work in progress', text='Hi')
-        # await event.answer([ans])
-        # return
 
 
 @client.on(events.NewMessage)
 async def answer(event):
     if event.text == '/start':
-        await event.reply('Siema mały kurwiu ;)')
+        await event.reply('Siema mały kurwiu 😂')
     if event.text.startswith('@'):
         await event.respond('It\'s me 😂')
-    # todo:create function to response on messages
 
 
 with client:
