@@ -21,17 +21,25 @@ async def inline_query(event):
     ans = []
     if not event.text or len(event.text) < 3:
         for entry, value in commands.items():
-            ans.append(await builder.article(entry, text=value))
+            value_json = json.loads(value)
+            ans.append(await builder.article(entry, text=value_json['text'], description=value_json['desc']))
         await event.answer(ans)
         return
     else:
         ans_list = await create_answer(event.text)
         for entry, value in ans_list.items():
-            ans.append(await builder.article(entry, text=value))
+            value_json = json.loads(value)
+            if value_json['withImage'] == 'True':
+                ans.append(await builder.article(entry, text=value_json['text'], description=value_json['desc'],
+                                                 thumb=InputWebDocument(url=value_json['imageUrl'], size=0,
+                                                                        mime_type=value_json['imageType'],
+                                                                        attributes=[], )))
+            else:
+                ans.append(await builder.article(entry, text=value_json['text'], description=value_json['desc']))
         await event.answer(ans)
         return
-        #TODO:dict{'label':'json'}  (label = label of builder, json = description, Image URL, text)
-        #TODO:Auto reload modules on function call
+        # TODO:dict{'label':'json'}  (label = label of builder, json = description, Image URL, text)
+        # TODO:Auto reload modules on function call
 
         # ans = builder.article('Work in progress', text='Hi')
         # await event.answer([ans])
@@ -44,6 +52,7 @@ async def answer(event):
         await event.reply('Siema mały kurwiu ;)')
     if event.text.startswith('@'):
         await event.respond('It\'s me 😂')
+    # todo:create function to response on messages
 
 
 with client:

@@ -19,12 +19,14 @@ zodiacs = {
 
 async def get_horo():
     infos = {}
-    for x in zodiacs:
+    for entry, value in zodiacs.items():
         params = (
-            ('sign', x),
+            ('sign', entry),
             ('day', 'today'),
         )
         response = requests.post('https://aztro.sameerkumar.website/', params=params)
         result = json.loads(response.text)
-        infos[x] = x + '\nLucky number: ' + result['lucky_number'] + '\nLucky hour: ' + result['lucky_time'] + '\nYour horoscope: ' + result['description']
+        infos[entry] = '{"text": "' + entry + '\\nLucky number: ' + result['lucky_number'] + '\\nLucky hour: ' + result[
+            'lucky_time'] + '\\nYour horoscope: ' + result[
+                           'description'] + '", "desc": "Display horoscope for ' + entry + '", "withImage": "True", "imageType": "image/jpeg", "imageUrl": "' + value + '"}'
     return infos
